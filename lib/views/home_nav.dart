@@ -1,4 +1,5 @@
 import 'package:ecommerce_customer/views/home.dart';
+import 'package:ecommerce_customer/views/profile.dart';
 import 'package:flutter/material.dart';
 
 class HomeNav extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomeNavState extends State<HomeNav> {
     HomePage(),
     Text("Order"),
     Text("Cart"),
-    Text("Profile"),
+    ProfilePage(),
   ];
 
   @override

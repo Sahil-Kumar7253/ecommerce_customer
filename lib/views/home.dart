@@ -14,19 +14,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
-        actions: [
-          IconButton(
-              onPressed: (){
-                AuthService().signOut();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login',
-                      (route) => false,
-                );
-              },
-              icon: Icon(Icons.edit_outlined)
-          )
-        ],
       ),
     );
   }

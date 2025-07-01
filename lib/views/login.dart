@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20),
                     SizedBox(
-                      width: double.infinity,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
@@ -206,6 +206,8 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
