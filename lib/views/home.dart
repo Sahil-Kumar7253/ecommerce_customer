@@ -1,3 +1,6 @@
+import 'package:ecommerce_customer/Container/category_Container.dart';
+import 'package:ecommerce_customer/Container/discount_Container.dart';
+import 'package:ecommerce_customer/Container/promo_Container.dart';
 import 'package:ecommerce_customer/controllers/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +17,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
+      ),
+      body: Column(
+        children: [
+          PromoContainer(),
+          DiscountContainer(),
+          CategoryContainer()
+        ],
       ),
     );
   }
