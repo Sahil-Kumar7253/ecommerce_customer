@@ -54,25 +54,34 @@ class CategoryButton extends StatefulWidget {
 class _CategoryButtonState extends State<CategoryButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(8),
-      height: 140,
-      width: 120,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300,width: 4),
-          borderRadius: BorderRadius.circular(4),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.network(widget.imagepath,height: 80),
-          SizedBox(height: 8),
-          Text(
-              "${widget.name.substring(0,1).toUpperCase()}${widget.name.substring(1)}"
-          )
-        ],
+    return GestureDetector(
+      onTap: (){
+        Navigator.pushNamed(
+            context,
+            '/specific',
+            arguments: {"name" : widget.name}
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
+        height: 140,
+        width: 120,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300,width: 4),
+            borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.network(widget.imagepath,height: 80),
+            SizedBox(height: 8),
+            Text(
+                "${widget.name.substring(0,1).toUpperCase()}${widget.name.substring(1)}"
+            )
+          ],
+        ),
       ),
     );
   }
