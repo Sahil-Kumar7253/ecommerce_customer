@@ -1,5 +1,6 @@
 import 'package:ecommerce_customer/Container/category_Container.dart';
 import 'package:ecommerce_customer/Container/discount_Container.dart';
+import 'package:ecommerce_customer/Container/home_page_maker_container.dart';
 import 'package:ecommerce_customer/Container/promo_Container.dart';
 import 'package:ecommerce_customer/controllers/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: Column(
-        children: [
-          PromoContainer(),
-          DiscountContainer(),
-          CategoryContainer()
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            PromoContainer(),
+            DiscountContainer(),
+            CategoryContainer(),
+            HomePageMakerContainer()
+          ],
+        ),
       ),
     );
   }
