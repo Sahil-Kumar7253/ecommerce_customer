@@ -58,7 +58,7 @@ class _CartPageState extends State<CartPage> {
                 Text("Total : ₹${value.totalCost}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                 ElevatedButton(
                     onPressed: (){
-
+                        Navigator.pushNamed(context, "/checkout");
                     },
                     child: Text("Checkout"),
                   style: ElevatedButton.styleFrom(

@@ -59,6 +59,15 @@ class DbService{
         .snapshots();
   }
 
+  //verify Coupons
+  Future<QuerySnapshot> verifyDiscount({required String code}){
+    print("Searching for Code : $code");
+    return FirebaseFirestore.instance
+        .collection("shop_coupon")
+        .where("code", isEqualTo: code)
+        .get();
+  }
+
   //read category
   Stream<QuerySnapshot> readCategory(){
     return FirebaseFirestore.instance

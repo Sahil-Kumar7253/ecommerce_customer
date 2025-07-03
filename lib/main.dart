@@ -1,6 +1,7 @@
 import 'package:ecommerce_customer/providers/cart_provider.dart';
 import 'package:ecommerce_customer/providers/user_provider.dart';
 import 'package:ecommerce_customer/views/cart_page.dart';
+import 'package:ecommerce_customer/views/checkout_page.dart';
 import 'package:ecommerce_customer/views/discount_Page.dart';
 import 'package:ecommerce_customer/views/home.dart';
 import 'package:ecommerce_customer/views/home_nav.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
           "/specific" : (context) => const SpecificProduct(),
           "/viewproduct" : (context) => const ViewProduct(),
           "/cart" : (context) => const CartPage(),
+          '/checkout' : (context) => const CheckoutPage(),
         },
       ),
     );
