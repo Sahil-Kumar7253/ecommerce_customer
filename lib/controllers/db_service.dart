@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../models/cartModel.dart';
+
 class DbService{
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -74,4 +76,87 @@ class DbService{
         .snapshots();
   }
 
+  //search product by productId
+  Stream<QuerySnapshot> readProductByProductId(List<String> productId){
+    return FirebaseFirestore.instance
+        .collection("shop_products")
+        .where(FieldPath.documentId, whereIn: productId)
+        .snapshots();
+  }
+
+  //Cart
+  //display the User Cart
+
+  Stream<QuerySnapshot> readUserCart(){
+    return FirebaseFirestore.instance
+        .collection("shop_users")
+        .doc(user!.uid)
+        .collection("shop_cart")
+        .snapshots();
+  }
+
+  //adding product to the cart
+  Future addToCart({required CartModel cartData}) async {
+    try{
+      await FirebaseFirestore.instance
+          .collection("shop_users")
+          .doc(user!.uid)
+          .collection("shop_cart")
+          .doc(cartData.productId)
+          .update({
+          'productId': cartData.productId,
+          'quantity': FieldValue.increment(1)
+      });
+    }on FirebaseException catch(e){
+      print("Firebase Exception : ${e.code}");
+      if(e.code == "not-found"){
+         //setData
+        await FirebaseFirestore.instance
+            .collection("shop_users")
+            .doc(user!.uid)
+            .collection("shop_cart")
+            .doc(cartData.productId)
+            .set({
+          'productId': cartData.productId,
+          'quantity': 1
+        });
+      }
+    }
+  }
+
+  //delete specific product from the cart
+  Future deleteItemFromCart({required String productId}) async {
+      await FirebaseFirestore.instance
+          .collection("shop_users")
+          .doc(user!.uid)
+          .collection("shop_cart")
+          .doc(productId)
+          .delete();
+  }
+
+  //empty after using cart
+  Future emptyCart() async {
+    await FirebaseFirestore.instance
+        .collection("shop_users")
+        .doc(user!.uid)
+        .collection("shop_cart")
+        .get()
+        .then((querySnapshot) {
+          for(DocumentSnapshot ds in querySnapshot.docs){
+            ds.reference.delete();
+          }
+    });
+  }
+
+  //decrease the count
+  Future decreaseQuantity({required String productId}) async {
+    await FirebaseFirestore.instance
+        .collection("shop_users")
+        .doc(user!.uid)
+        .collection("shop_cart")
+        .doc(productId)
+        .update({
+      "quantity" : FieldValue.increment(-1)
+    });
+  }
 }

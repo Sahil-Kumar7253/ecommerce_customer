@@ -1,4 +1,6 @@
+import 'package:ecommerce_customer/providers/cart_provider.dart';
 import 'package:ecommerce_customer/providers/user_provider.dart';
+import 'package:ecommerce_customer/views/cart_page.dart';
 import 'package:ecommerce_customer/views/discount_Page.dart';
 import 'package:ecommerce_customer/views/home.dart';
 import 'package:ecommerce_customer/views/home_nav.dart';
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -47,6 +50,7 @@ class MyApp extends StatelessWidget {
           "/discountpage" : (context) => const DiscountPage(),
           "/specific" : (context) => const SpecificProduct(),
           "/viewproduct" : (context) => const ViewProduct(),
+          "/cart" : (context) => const CartPage(),
         },
       ),
     );

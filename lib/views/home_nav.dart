@@ -2,6 +2,8 @@ import 'package:ecommerce_customer/views/home.dart';
 import 'package:ecommerce_customer/views/profile.dart';
 import 'package:flutter/material.dart';
 
+import 'cart_page.dart';
+
 class HomeNav extends StatefulWidget {
   const HomeNav({super.key});
 
@@ -15,7 +17,7 @@ class _HomeNavState extends State<HomeNav> {
   List pages = [
     HomePage(),
     Text("Order"),
-    Text("Cart"),
+    CartPage(),
     ProfilePage(),
   ];
 

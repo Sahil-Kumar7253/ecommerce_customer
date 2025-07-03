@@ -1,7 +1,10 @@
+import 'package:ecommerce_customer/models/cartModel.dart';
 import 'package:ecommerce_customer/views/specific_Product.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/productsModel.dart';
+import '../providers/cart_provider.dart';
 
 class ViewProduct extends StatefulWidget {
   const ViewProduct({super.key});
@@ -106,7 +109,10 @@ class _ViewProductState extends State<ViewProduct> {
             height: 60,
             width: MediaQuery.of(context).size.width * .5,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Provider.of<CartProvider>(context, listen: false).addToCart(CartModel(productId: argumnets.id, quantity: 1));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added to Cart")));
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue.shade500,
                 foregroundColor: Colors.white,
