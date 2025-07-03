@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_customer/constant/payment.dart';
 import 'package:ecommerce_customer/controllers/db_service.dart';
 import 'package:ecommerce_customer/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
@@ -25,6 +27,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     });
   }
+
+  Future<void> initPaymentSheet(int cost) async {
+    try {
+      final user = Provider.of<UserProvider>(context, listen: false);
+      // 1. create payment intent on the server
+      final data = await createPaymentIntent(name: user.name, address: user.address, amount: (cost*100).toString());
+
+      // 2. initialize the payment sheet
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          // Set to true for custom flow
+          customFlow: false,
+          // Main params
+          merchantDisplayName: 'Flutter Stripe Store Demo',
+          paymentIntentClientSecret: data['client_secret'],
+          // Customer keys
+          customerEphemeralKeySecret: data['ephemeralKey'],
+          customerId: data['id'],
+          // Extra options
+          applePay: const PaymentSheetApplePay(
+            merchantCountryCode: 'US',
+          ),
+          googlePay: const PaymentSheetGooglePay(
+            merchantCountryCode: 'US',
+            testEnv: true,
+          ),
+          style: ThemeMode.dark,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+      rethrow;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +205,42 @@ class _CheckoutPageState extends State<CheckoutPage> {
               );
             }),
         ),
-      )
+      ),
+
+      bottomNavigationBar: Container(
+        height: 60,
+        padding: EdgeInsets.all(10),
+        child: ElevatedButton(onPressed: () async {
+          final user = Provider.of<UserProvider>(context, listen: false);
+          if(user.name == "" ||
+              user.phone == "" ||
+              user.address == "" ||
+              user.email == ""){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Please fill all the details"))
+            );
+            return ;
+          }
+
+          await initPaymentSheet(Provider.of<CartProvider>(context, listen: false).totalCost - discount);
+
+          try{
+            await Stripe.instance.presentPaymentSheet();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Successful", style: TextStyle(color: Colors.white)),backgroundColor: Colors.greenAccent));
+
+          } catch(e){
+            print("Error in payment sheet : $e");
+            print("Payment sheet failed");
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Failed", style: TextStyle(color: Colors.white)),backgroundColor: Colors.redAccent));
+          }
+        },
+        child: Text("Proceed To Pay"),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white
+        ),
+        ),
+      ),
     );
   }
 }
