@@ -38,24 +38,24 @@ class _ProfilePageState extends State<ProfilePage> {
            ListTile(
              title: Text("Order"),
              leading: Icon(Icons.local_shipping_outlined),
-             onTap: () async {
-
+             onTap: (){
+               Navigator.pushNamed(context, '/orders');
              },
            ),
            Divider(thickness: 1,endIndent: 10,indent: 10),
            ListTile(
              title: Text("Discount and Offers"),
              leading: Icon(Icons.discount_outlined),
-             onTap: () async {
-
+             onTap: (){
+               Navigator.pushNamed(context, '/discountpage');
              },
            ),
            Divider(thickness: 1,endIndent: 10,indent: 10),
            ListTile(
              title: Text("Help and Support"),
              leading: Icon(Icons.support_agent_outlined),
-             onTap: () async {
-
+             onTap: (){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mail us at ecommerce@gmail.com")));
              },
            ),
            Divider(thickness: 1,endIndent: 10,indent: 10),
