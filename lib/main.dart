@@ -6,9 +6,11 @@ import 'package:ecommerce_customer/views/discount_Page.dart';
 import 'package:ecommerce_customer/views/home.dart';
 import 'package:ecommerce_customer/views/home_nav.dart';
 import 'package:ecommerce_customer/views/login.dart';
+import 'package:ecommerce_customer/views/ordersPage.dart';
 import 'package:ecommerce_customer/views/signup_page.dart';
 import 'package:ecommerce_customer/views/specific_Product.dart';
 import 'package:ecommerce_customer/views/updateProfile.dart';
+import 'package:ecommerce_customer/views/view_Order.dart';
 import 'package:ecommerce_customer/views/view_product.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
           "/viewproduct" : (context) => const ViewProduct(),
           "/cart" : (context) => const CartPage(),
           '/checkout' : (context) => const CheckoutPage(),
+          '/orders' : (context) => const OrdersPage(),
+          '/view_order' : (context) => const ViewOrder(),
         },
       ),
     );

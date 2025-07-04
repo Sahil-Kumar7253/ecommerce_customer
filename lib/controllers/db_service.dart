@@ -93,6 +93,26 @@ class DbService{
         .snapshots();
   }
 
+  //increase product Count
+  Future increaseProductCount({required String productId, required int quantity}) async {
+    await FirebaseFirestore.instance
+        .collection("shop_products")
+        .doc(productId)
+        .update({
+      "maxQuantity" : FieldValue.increment(quantity)
+    });
+  }
+
+  //reduce the count of product
+  Future reduceProductCount({required String productId, required int quantity}) async {
+    await FirebaseFirestore.instance
+        .collection("shop_products")
+        .doc(productId)
+        .update({
+      "maxQuantity" : FieldValue.increment(-quantity)
+    });
+  }
+
   //Cart
   //display the User Cart
 
@@ -168,4 +188,33 @@ class DbService{
       "quantity" : FieldValue.increment(-1)
     });
   }
+
+
+  //Order
+  //create a new Order
+  Future createOrder({required Map<String, dynamic> data}) async {
+    await FirebaseFirestore.instance
+        .collection("shop_orders")
+        .add(data);
+  }
+
+
+  //update the status of the order
+  Future updateOrderStatus({required String docId, required Map<String, dynamic> data}) async {
+    await FirebaseFirestore.instance
+        .collection("shop_orders")
+        .doc(docId)
+        .update(data);
+  }
+
+  //read the order data of specific User
+  Stream<QuerySnapshot> readUserOrders(){
+    return FirebaseFirestore.instance
+        .collection("shop_orders")
+        .where("user_id", isEqualTo: user!.uid)
+        .orderBy("created_at", descending: true)
+        .snapshots();
+  }
+
+
 }

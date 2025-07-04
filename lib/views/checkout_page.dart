@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_customer/constant/payment.dart';
 import 'package:ecommerce_customer/controllers/db_service.dart';
 import 'package:ecommerce_customer/providers/user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
@@ -226,6 +227,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
           try{
             await Stripe.instance.presentPaymentSheet();
+
+            final cart = Provider.of<CartProvider>(context,listen: false);
+            User? currentUser = FirebaseAuth.instance.currentUser;
+            List products = [];
+
+            for(int i = 0; i < cart.products.length; i++){
+              products.add({
+                "id": cart.products[i].id,
+                "name": cart.products[i].name,
+                "image": cart.products[i].image,
+                "quantity": cart.carts[i].quantity,
+                "single_price": cart.products[i].new_Price,
+                "total_price": cart.products[i].new_Price * cart.carts[i].quantity
+              });
+            }
+
+            //Order Status
+            //PAID,SHIPPED,DELIVERED,CANCELLED
+            Map<String, dynamic> orderData = {
+              "user_id" : currentUser!.uid,
+              "email" : user.email,
+              "name" : user.name,
+              "phone" : user.phone,
+              "address" : user.address,
+              "discount" : discount,
+              "total" : cart.totalCost - discount,
+              "created_at" : DateTime.now().millisecondsSinceEpoch,
+              "products" : products,
+              "status" : "PAID",
+            };
+
+            await DbService().createOrder(data: orderData);
+
+            for(int i = 0; i < cart.products.length; i++){
+              await DbService().reduceProductCount(productId: cart.products[i].id, quantity: cart.carts[i].quantity);
+            }
+
+            //empty the cart
+            await DbService().emptyCart();
+
+            //close the checkout page
+            Navigator.pop(context);
+
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Successful", style: TextStyle(color: Colors.white)),backgroundColor: Colors.greenAccent));
 
           } catch(e){

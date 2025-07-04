@@ -1,8 +1,11 @@
+import 'package:ecommerce_customer/providers/cart_provider.dart';
 import 'package:ecommerce_customer/views/home.dart';
 import 'package:ecommerce_customer/views/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'cart_page.dart';
+import 'ordersPage.dart';
 
 class HomeNav extends StatefulWidget {
   const HomeNav({super.key});
@@ -16,7 +19,7 @@ class _HomeNavState extends State<HomeNav> {
 
   List pages = [
     HomePage(),
-    Text("Order"),
+    OrdersPage(),
     CartPage(),
     ProfilePage(),
   ];
@@ -46,7 +49,18 @@ class _HomeNavState extends State<HomeNav> {
              label: "Order",
            ),
            BottomNavigationBarItem(
-             icon: Icon(Icons.shopping_cart_outlined),
+             icon: Consumer<CartProvider>(
+                 builder: (context,cart,child){
+                   if(cart.carts.length > 0){
+                     return Badge(
+                       child: Icon(Icons.shopping_cart_outlined),
+                       label: Text(cart.carts.length.toString()),
+                       backgroundColor: Colors.green,
+                     );
+                   }
+                   return Icon(Icons.shopping_cart_outlined);
+                 },
+             ),
              label: "Cart",
            ),
            BottomNavigationBarItem(
