@@ -125,7 +125,10 @@ class _ViewProductState extends State<ViewProduct> {
             height: 60,
             width: MediaQuery.of(context).size.width * .5,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Provider.of<CartProvider>(context, listen: false).addToCart(CartModel(productId: argumnets.id, quantity: 1));
+                Navigator.pushNamed(context, "/checkout");
+              },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blue.shade500,
                 backgroundColor: Colors.white,

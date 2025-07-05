@@ -97,4 +97,15 @@ class CartProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+
+  void cancelProvider(){
+    _cartSubscription?.cancel();
+    _productSubscription?.cancel();
+  }
+
+  @override
+  void dispose() {
+    cancelProvider();
+    super.dispose();
+  }
 }

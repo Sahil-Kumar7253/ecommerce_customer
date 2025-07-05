@@ -1,11 +1,8 @@
 import 'package:ecommerce_customer/Container/additionalConfirm.dart';
 import 'package:ecommerce_customer/controllers/db_service.dart';
 import 'package:ecommerce_customer/models/order_model.dart';
-import 'package:ecommerce_customer/models/productsModel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
 
 class ViewOrder extends StatefulWidget {
   const ViewOrder({super.key});

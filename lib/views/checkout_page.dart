@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_customer/constant/payment.dart';
 import 'package:ecommerce_customer/controllers/db_service.dart';
+import 'package:ecommerce_customer/controllers/mail_service.dart';
+import 'package:ecommerce_customer/models/order_model.dart';
 import 'package:ecommerce_customer/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   int discount = 0;
   int toPay = 0;
   String discountText = "";
+  bool paymentSuccesful = false;
+  Map<String , dynamic> dataOfOrder = {};
 
   discountCalculator(int disPercentage,int  totalCost){
     discount = (disPercentage * totalCost) ~/ 100;
@@ -258,6 +262,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               "status" : "PAID",
             };
 
+            dataOfOrder = orderData;
+
             await DbService().createOrder(data: orderData);
 
             for(int i = 0; i < cart.products.length; i++){
@@ -266,6 +272,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
             //empty the cart
             await DbService().emptyCart();
+
+            paymentSuccesful = true;
 
             //close the checkout page
             Navigator.pop(context);
@@ -276,6 +284,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
             print("Error in payment sheet : $e");
             print("Payment sheet failed");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Payment Failed", style: TextStyle(color: Colors.white)),backgroundColor: Colors.redAccent));
+          }
+
+          if(paymentSuccesful){
+            MailService().sendMailFromGmail(user.email,OrderModel.fromJson(dataOfOrder,""));
           }
         },
         child: Text("Proceed To Pay"),
